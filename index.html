@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>The Talk Title</title>
+    <title>Programming Language Properties</title>
     <meta name="author" content="Pat Brisbin">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -14,12 +14,231 @@
   <body>
     <div class="reveal">
       <div class="slides">
-        <section
-          data-markdown="slides/one.md"
-          data-separator="^\n\n\n"
-          data-vertical="^\n\n"
-          data-notes="^Note:"
-          data-charset="utf8">
+
+        <section>
+          <header>
+            <h1>Programming Language Properties</h1>
+          </header>
+        </section>
+
+        <section>
+          <h1>Topics</h1>
+          <ul>
+            <li>Execution model: Interpret vs Compile</li>
+            <li>Type system: Dynamic vs Static</li>
+            <li>Paradigm: Object-oriented vs Functional</li>
+          </ul>
+        </section>
+
+        <section>
+          <section>
+            <h1>Execution Model</h1>
+          </section>
+
+          <section>
+            <h1>Interpret</h1>
+            <pre>
+              <code>
+              $ ruby -e 'puts "Hello"'
+              Hello
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <h1>Benefits</h1>
+            <ul>
+              <li>Immediate feedback</li>
+              <li>[Re]execute [new] code while running</li>
+            </ul>
+          </section>
+
+          <section>
+            <h1>Compile</h1>
+            <pre>
+              <code>
+              $ echo 'main = putStrLn "Hello"' &gt; main.hs
+              $ ghc -o main main.hs
+              $ ./main
+              Hello
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <h1>Benefits</h1>
+            <ul>
+              <li>Performance</li>
+              <li>Catch errors are compile time</li>
+              <li>Closed source*</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Type Systems</h1>
+          </section>
+
+          <section>
+            <h1>What is a Type</h1>
+            <ul>
+              <li>Concrete: <code>String</code></li>
+              <li>Abstract: <code>Enumerable</code></li>
+            </ul>
+          </section>
+
+          <section>
+            <h1>Dynamic</h1>
+            <ul>
+              <li>Types are "checked" at runtime</li>
+              <li>Duck typing</li>
+              <li>&rArr; <code>NoMethodError</code></li>
+            </ul>
+          </section>
+
+          <section>
+            <h1>Benefits</h1>
+            <ul>
+              <li>Objects can change type at runtime</li>
+              <li>Patterns are easier: Dependency injection, Decorator, etc</li>
+            </ul>
+            <pre>
+              <code>
+              def current_user
+                User.find(session[:user_id]) || Guest.new
+              end
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <h1>Static</h1>
+            <ul>
+              <li>Types are checked before runtime (usually at compile)</li>
+              <li>Many ways to do this (<em>weak</em> vs <em>strong</em>)</li>
+            </ul>
+          </section>
+
+          <section>
+            <h1>Benefits</h1>
+            <ul>
+              <li>Catch programmer error</li>
+              <li>Clarify implicit intentions</li>
+              <li>Requires a <em>good</em> type system</li>
+            </ul>
+
+            <pre>
+              <code class="haskell">
+              detect :: (a -&gt; Bool) -&gt; [a] -&gt; Maybe a
+              detect = -- ...
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <h1>Type Inference</h1>
+            <ul>
+              <li>Best of both words</li>
+              <li>No need to explicitly say what things are</li>
+              <li>Type system <em>infers</em> what type things are</li>
+            </ul>
+
+            <pre>
+              <code class="haskell">
+              -- I never said what table to select from
+              users &lt;- runDB $ selectList [] []
+
+              -- but because `userName` can only operate on Users, the
+              -- system will *infer* that I wanted Users
+              map userName users
+              </code>
+            </pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Paradigms</h1>
+          </section>
+
+          <section>
+            <h1>Object Oriented Programming</h1>
+            <p>Construct programs as a composition of <em>Objects</em></p>
+          </section>
+
+          <section>
+            <h1>Objects</h1>
+            <ul>
+              <li>State and behavior together</li>
+              <li>Encapsulation</li>
+              <li>Inheritance</li>
+            </ul>
+            <pre>
+              <code class="ruby">
+                p = Person.new("Pat", 28)
+                p.age
+                # =&gt; 28
+
+                p.grow
+                p.age
+                # =&gt; 29
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <h1>Benefits</h1>
+            <ul>
+              <li>Fits with our conceptual model of the world</li>
+              <li>Everyone* is doing it</li>
+            </ul>
+          </section>
+
+          <section>
+            <h1>Functional Programming</h1>
+            <p><small>the new hotness</small></p>
+            <p>Construct programs as a composition of <em>Functions</em></p>
+          </section>
+
+          <section>
+            <h1>Functions</h1>
+            <ul>
+              <li>Black box: Value in &rArr; value out</li>
+              <li>Pure: No side effects</li>
+              <li>Convert between <em>immutable</em> values</li>
+            </ul>
+            <pre>
+              <code class="haskell">
+                let p  = Person "Pat" 28
+                    p' = grow p
+                in (age p, age p')
+                -- =&gt; (28, 29)
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <h1>Benefits</h1>
+            <ul>
+              <li>Performance</li>
+              <li>Concurrency / parallelism</li>
+              <li>Clarity</li>
+              <li>
+              You get to sound smart by tossing around words like
+              <em>thunk</em>, <em>Functor</em> and <em>Monad</em>
+              </li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <h1>Thanks!</h1>
+          <ul>
+            <li>Pat Brisbin</li>
+            <li>http://pbrisbin.com</li>
+            <li>@patbrisbin</li>
+          </ul>
         </section>
       </div>
     </div>
@@ -29,8 +248,6 @@
       Reveal.initialize({
         dependencies: [
           { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
           { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
         ]
       });
